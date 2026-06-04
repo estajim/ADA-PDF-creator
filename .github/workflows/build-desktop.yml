@@ -27,40 +27,7 @@ jobs:
           pip install pyinstaller
 
       - name: Generate app icon
-        run: |
-          mkdir -p build
-          python - << 'PYEOF'
-from PIL import Image, ImageDraw
-from pathlib import Path
-import subprocess, sys
-
-sizes = [16,32,64,128,256,512,1024]
-iset  = Path("build/ADA_PDF_Converter.iconset")
-iset.mkdir(parents=True, exist_ok=True)
-
-for sz in sizes:
-    img  = Image.new("RGBA",(sz,sz),(0,0,0,0))
-    draw = ImageDraw.Draw(img)
-    pad  = sz//10
-    draw.ellipse([pad,pad,sz-pad,sz-pad], fill=(91,79,232,255))
-    pw,ph = int(sz*.38),int(sz*.46)
-    px,py = (sz-pw)//2, (sz-ph)//2-int(sz*.04)
-    c = max(1,sz//20)
-    draw.rounded_rectangle([px,py,px+pw,py+ph],radius=c,fill=(255,255,255,240))
-    dog=int(pw*.28)
-    draw.polygon([px+pw-dog,py,px+pw,py+dog,px+pw-dog,py+dog],fill=(200,195,245,255))
-    bh,bw=max(1,sz//28),int(pw*.55)
-    bx,sp=px+int(pw*.14),max(2,sz//18)
-    for i in range(3):
-        by2=py+ph//3+i*sp
-        draw.rectangle([bx,by2,bx+bw,by2+bh],fill=(91,79,232,200))
-    img.save(iset/f"icon_{sz}x{sz}.png")
-    if sz<=512:
-        img.resize((sz*2,sz*2),Image.LANCZOS).save(iset/f"icon_{sz}x{sz}@2x.png")
-
-subprocess.run(["iconutil","-c","icns",str(iset),"-o","build/ada_pdf_icon.icns"],check=True)
-print("Icon generated")
-PYEOF
+        run: python scripts/generate_icon.py
 
       - name: Build macOS app
         run: pyinstaller ada_pdf.spec --noconfirm
