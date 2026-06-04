@@ -10,9 +10,10 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from ada_pdf.api.middleware import RateLimitMiddleware, RequestIDMiddleware
-from ada_pdf.api.routers import documents, health
+from ada_pdf.api.routers import documents, health, setup as setup_router
 from ada_pdf.config import get_settings
 from ada_pdf.db.session import close_db, init_db
+from ada_pdf.setup.installer import is_ml_ready
 from ada_pdf.utils.logging import configure_logging
 
 _STATIC_DIR = Path(__file__).parent.parent / "static"
@@ -58,6 +59,7 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(health.router)
+    app.include_router(setup_router.router)
     app.include_router(documents.router)
 
     # Serve the SPA — static assets first, then root catch-all
@@ -66,6 +68,10 @@ def create_app() -> FastAPI:
 
     @app.get("/", include_in_schema=False)
     async def serve_ui():
+        # In SIMPLE_MODE (desktop app): redirect to setup screen until ML is ready
+        if settings.SIMPLE_MODE and not is_ml_ready():
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse("/setup")
         return FileResponse(str(_STATIC_DIR / "index.html"))
 
     return app

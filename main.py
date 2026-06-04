@@ -49,7 +49,32 @@ def _open_browser() -> None:
     webbrowser.open(URL)
 
 
+def _load_ml_venv() -> None:
+    """Add the ML venv's site-packages to sys.path if setup has been run."""
+    ml_venv = Path.home() / ".ada-pdf-creator" / "ml-venv"
+    if not ml_venv.exists():
+        return
+    import platform
+    if platform.system() == "Windows":
+        sp = ml_venv / "Lib" / "site-packages"
+    else:
+        lib = ml_venv / "lib"
+        sp = None
+        if lib.exists():
+            for child in sorted(lib.iterdir()):
+                candidate = child / "site-packages"
+                if candidate.exists():
+                    sp = candidate
+                    break
+    if sp and sp.exists() and str(sp) not in sys.path:
+        sys.path.insert(0, str(sp))
+        print(f"[ML] Loaded ML packages from {sp}")
+
+
 def main() -> None:
+    # Load ML venv BEFORE importing ada_pdf so pipeline stages can import torch etc.
+    _load_ml_venv()
+
     print(f"ADA PDF Converter — starting on {URL}")
     threading.Thread(target=_open_browser, daemon=True).start()
 

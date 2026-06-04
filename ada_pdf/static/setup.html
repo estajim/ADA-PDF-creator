@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ADA PDF Converter — Setup</title>
+  <link rel="stylesheet" href="/static/fonts/inter.css"/>
+  <style>
+    :root {
+      --brand: #5B4FE8; --brand-light: #EDE9FF;
+      --success: #16a34a; --danger: #dc2626;
+      --text: #1a1a2e; --text-soft: #6b7280;
+      --border: #e5e7eb; --surface: #fff; --bg: #f8f7ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 40px 48px;
+      max-width: 640px; width: 100%;
+      box-shadow: 0 4px 24px rgba(91,79,232,.08);
+    }
+    .logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
+    .logo svg { color: var(--brand); }
+    .logo-text { font-size:1.1rem; font-weight:700; color:var(--brand); }
+    h1 { font-size:1.5rem; font-weight:700; margin-bottom:8px; }
+    .subtitle { color:var(--text-soft); font-size:.93rem; margin-bottom:28px; line-height:1.5; }
+    .steps { margin-bottom:28px; display:flex; flex-direction:column; gap:10px; }
+    .step {
+      display:flex; align-items:flex-start; gap:12px;
+      padding:12px 16px; border-radius:10px;
+      background:var(--bg); border:1px solid var(--border);
+      font-size:.88rem;
+    }
+    .step-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+    .step-body { flex:1; }
+    .step-label { font-weight:600; margin-bottom:2px; }
+    .step-size { color:var(--text-soft); font-size:.82rem; }
+
+    /* Progress bar */
+    .progress-wrap { margin-bottom:20px; display:none; }
+    .progress-bar-bg {
+      height:8px; border-radius:4px; background:var(--border);
+      overflow:hidden; margin-bottom:8px;
+    }
+    .progress-bar-fill {
+      height:100%; border-radius:4px;
+      background:var(--brand); width:0%; transition:width .4s ease;
+    }
+    .progress-label { font-size:.83rem; color:var(--text-soft); }
+
+    /* Log terminal */
+    .log-wrap { display:none; margin-bottom:20px; }
+    .log {
+      background:#0f1117; color:#d4d4d8; border-radius:10px;
+      padding:14px 16px; font-family:'JetBrains Mono',Menlo,monospace;
+      font-size:.75rem; line-height:1.6; height:200px; overflow-y:auto;
+      white-space:pre-wrap; word-break:break-all;
+    }
+
+    /* Buttons */
+    .btn {
+      width:100%; padding:14px; border-radius:10px; border:none;
+      font-size:1rem; font-weight:600; cursor:pointer; transition:.15s;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .btn-primary { background:var(--brand); color:#fff; }
+    .btn-primary:hover:not(:disabled) { opacity:.9; transform:translateY(-1px); }
+    .btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-open { background:var(--success); color:#fff; display:none; }
+    .btn-open:hover { opacity:.9; }
+
+    .done-msg { display:none; text-align:center; margin-bottom:20px; }
+    .done-msg .check { font-size:2.5rem; margin-bottom:8px; }
+    .done-msg h2 { font-size:1.15rem; font-weight:700; color:var(--success); margin-bottom:4px; }
+    .done-msg p { color:var(--text-soft); font-size:.88rem; }
+
+    .note { font-size:.8rem; color:var(--text-soft); text-align:center; margin-top:16px; }
+    a { color:var(--brand); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+    </svg>
+    <span class="logo-text">ADA PDF Converter</span>
+  </div>
+
+  <h1>One-time setup required</h1>
+  <p class="subtitle">
+    The AI models for OCR, alt-text generation, and layout analysis need to be
+    downloaded once (~2 GB). This happens in the background — you only do this once.
+  </p>
+
+  <div class="steps" id="steps-list">
+    <div class="step">
+      <span class="step-icon">⚡</span>
+      <div class="step-body">
+        <div class="step-label">Package manager (uv)</div>
+        <div class="step-size">~8 MB · takes seconds</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-icon">🐍</span>
+      <div class="step-body">
+        <div class="step-label">Python 3.11 runtime</div>
+        <div class="step-size">~30 MB · takes ~15 seconds</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-icon">🤖</span>
+      <div class="step-body">
+        <div class="step-label">ML packages (PyTorch, Surya OCR, BLIP)</div>
+        <div class="step-size">~900 MB · takes 3-5 minutes</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-icon">🧠</span>
+      <div class="step-body">
+        <div class="step-label">Model weights</div>
+        <div class="step-size">~1.5 GB · takes 3-5 minutes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-label" id="progress-label">Starting…</div>
+  </div>
+
+  <div class="log-wrap" id="log-wrap">
+    <div class="log" id="log-output"></div>
+  </div>
+
+  <div class="done-msg" id="done-msg">
+    <div class="check">✅</div>
+    <h2>Setup complete!</h2>
+    <p>All ML models are ready. Click below to open the converter.</p>
+  </div>
+
+  <button class="btn btn-primary" id="start-btn" onclick="startSetup()">
+    Download &amp; Set Up (≈ 2.5 GB · one time only)
+  </button>
+  <button class="btn btn-open" id="open-btn" onclick="openApp()">
+    Open ADA PDF Converter →
+  </button>
+
+  <p class="note">
+    Files saved to <code>~/.ada-pdf-creator/</code> ·
+    Needs internet · Takes 10-15 min on a typical connection
+  </p>
+</div>
+
+<script>
+  const STEPS = [
+    { key: 'uv',       label: 'Downloading package manager…',   pct: 10 },
+    { key: 'python',   label: 'Installing Python 3.11…',        pct: 20 },
+    { key: 'venv',     label: 'Creating virtual environment…',   pct: 25 },
+    { key: 'packages', label: 'Installing ML packages…',         pct: 70 },
+    { key: 'done',     label: 'Finalising…',                     pct: 100 },
+  ];
+
+  let currentPct = 0;
+
+  function setProgress(pct, label) {
+    currentPct = pct;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = label;
+  }
+
+  function appendLog(text) {
+    const el = document.getElementById('log-output');
+    el.textContent += text;
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function guessProgress(line) {
+    const l = line.toLowerCase();
+    if (l.includes('step 1') || l.includes('uv ready'))       setProgress(10, 'Package manager ready…');
+    if (l.includes('step 2') || l.includes('python 3.11 ready')) setProgress(20, 'Python 3.11 ready…');
+    if (l.includes('step 3') || l.includes('venv created'))   setProgress(25, 'Environment created…');
+    if (l.includes('step 4') || l.includes('installing ml'))  setProgress(30, 'Installing ML packages…');
+    if (l.includes('pytorch'))   setProgress(35, 'Installing PyTorch…');
+    if (l.includes('surya'))     setProgress(55, 'Installing Surya OCR…');
+    if (l.includes('transform')) setProgress(65, 'Installing BLIP models…');
+    if (l.includes('docling'))   setProgress(75, 'Installing layout analysis…');
+    if (l.includes('weasyprint'))setProgress(82, 'Installing PDF generator…');
+    if (l.includes('lingua'))    setProgress(88, 'Installing language detection…');
+  }
+
+  async function startSetup() {
+    const btn = document.getElementById('start-btn');
+    btn.disabled = true;
+    btn.textContent = 'Setting up…';
+    document.getElementById('steps-list').style.display = 'none';
+    document.getElementById('progress-wrap').style.display = 'block';
+    document.getElementById('log-wrap').style.display = 'block';
+    setProgress(2, 'Connecting…');
+
+    const es = new EventSource('/setup/stream');
+
+    es.onmessage = (e) => {
+      const text = e.data + '\n';
+      appendLog(text);
+      guessProgress(text.toLowerCase());
+
+      if (text.includes('SETUP_DONE')) {
+        es.close();
+        setProgress(100, 'Complete!');
+        document.getElementById('done-msg').style.display = 'block';
+        document.getElementById('open-btn').style.display = 'flex';
+        btn.style.display = 'none';
+      }
+      if (text.includes('ERROR:')) {
+        es.close();
+        setProgress(currentPct, '⚠ Error — check log above');
+        btn.disabled = false;
+        btn.textContent = 'Retry Setup';
+      }
+    };
+
+    es.onerror = () => {
+      es.close();
+      appendLog('\n[Connection lost — server may have restarted]\n');
+      btn.disabled = false;
+      btn.textContent = 'Retry';
+    };
+  }
+
+  function openApp() {
+    window.location.href = '/';
+  }
+</script>
+</body>
+</html>
