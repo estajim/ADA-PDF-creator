@@ -1,0 +1,51 @@
+# Minimal requirements for PyInstaller desktop build.
+# Heavy ML packages (PyTorch, Surya, BLIP, docling) are EXCLUDED from the bundle
+# because PyInstaller cannot analyse them in a reasonable time and they are
+# downloaded on first run anyway via the model-download step.
+#
+# OCR falls back to pytesseract (lighter, bundled Tesseract binary).
+# Alt-text generation is skipped unless the user enables it via ANTHROPIC_API_KEY.
+
+# Web framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+python-multipart==0.0.19
+
+# Database (SQLite only — no postgres driver needed)
+sqlalchemy[asyncio]==2.0.36
+aiosqlite==0.20.0
+
+# Settings
+pydantic-settings==2.6.1
+pydantic==2.10.3
+
+# PDF parsing
+pymupdf==1.25.1
+
+# OCR (lightweight — pytesseract wraps the Tesseract binary)
+pytesseract==0.3.13
+Pillow>=10.2.0,<11.0.0
+
+# PDF generation
+weasyprint==62.3
+reportlab==4.2.5
+Jinja2==3.1.4
+
+# Metadata / accessibility patching
+pikepdf==9.4.2
+fonttools>=4.28.0
+
+# Language detection (pure Python, no ML weights)
+lingua-language-detector==2.0.2
+
+# Utilities
+python-magic==0.4.27
+structlog==24.4.0
+httpx==0.28.1
+tenacity==9.0.0
+
+# Security
+passlib[bcrypt]==1.7.4
+
+# Python 3.9 backport for X | Y union syntax in type annotations
+eval_type_backport>=0.1.3

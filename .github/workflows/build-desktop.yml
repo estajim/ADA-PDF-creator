@@ -22,8 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt \
-            --extra-index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-pyinstaller.txt
           pip install pyinstaller
 
       - name: Generate app icon
@@ -62,8 +61,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt `
-            --extra-index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-pyinstaller.txt
           pip install pyinstaller
 
       - name: Build Windows executable

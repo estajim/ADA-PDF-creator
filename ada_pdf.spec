@@ -62,12 +62,16 @@ a = Analysis(
     hooksconfig={},
     runtime_hooks=[],
     excludes=[
-        # Exclude heavy packages not needed in SIMPLE_MODE
+        # Celery / broker stack not needed in SIMPLE_MODE
         "celery", "redis", "psycopg2", "asyncpg",
-        # Exclude test frameworks
-        "pytest", "hypothesis",
-        # Exclude Jupyter
-        "IPython", "jupyter",
+        # Heavy ML packages — downloaded at first run, not bundled
+        "torch", "torchvision", "torchaudio",
+        "transformers", "diffusers", "timm",
+        "surya", "docling",
+        # Test / notebook / CUDA
+        "pytest", "hypothesis", "IPython", "jupyter",
+        "tensorboard", "tensorflow", "jax",
+        "nvidia", "triton",
     ],
     noarchive=False,
 )
