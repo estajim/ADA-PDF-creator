@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "ada-pdf-creator"
+version = "1.0.0"
+description = "Production-grade ADA/PDF-UA compliant PDF accessibility converter"
+requires-python = ">=3.11"
+readme = "README.md"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ada_pdf*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "e2e: end-to-end tests requiring Docker services (deselect with '-m not e2e')",
+    "integration: integration tests",
+    "unit: unit tests",
+]
+filterwarnings = ["ignore::DeprecationWarning"]

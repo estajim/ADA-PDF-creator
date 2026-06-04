@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="{{ doc.language }}">
+<head>
+  <meta charset="UTF-8"/>
+  <title>{{ doc.title | e }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; margin: 2cm; }
+    h1 { font-size: 2em; margin-top: 1em; }
+    h2 { font-size: 1.6em; margin-top: 0.8em; }
+    h3 { font-size: 1.3em; margin-top: 0.6em; }
+    h4 { font-size: 1.1em; margin-top: 0.4em; }
+    h5 { font-size: 1em; font-weight: bold; }
+    h6 { font-size: 1em; font-style: italic; }
+    p  { margin: 0.5em 0; }
+    ul, ol { margin: 0.5em 0 0.5em 1.5em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+    th, td { border: 1px solid #ccc; padding: 0.35em 0.6em; text-align: left; vertical-align: top; }
+    th { background: #f0f0f0; font-weight: bold; }
+    figure { margin: 1em 0; }
+    figure img { max-width: 100%; height: auto; }
+    figcaption { font-size: 0.9em; color: #555; margin-top: 0.3em; }
+    label { display: block; margin-top: 0.6em; font-weight: bold; }
+    input, select, textarea { margin: 0.2em 0 0.6em; padding: 0.2em; }
+  </style>
+</head>
+<body>
+<main role="main">
+{%- for page in doc.pages %}
+  {%- for block in page.blocks | sort(attribute='reading_order') %}
+    {%- if not block.is_artifact %}
+      {%- if block.role.value in ('H1','H2','H3','H4','H5','H6') %}
+<{{ block.role.value | lower }}>{{ block.text | e }}</{{ block.role.value | lower }}>
+      {%- elif block.role.value == 'P' %}
+<p{% if block.lang %} lang="{{ block.lang }}"{% endif %}>{{ block.text | e }}</p>
+      {%- elif block.role.value == 'L' %}
+<ul>
+  {%- for child in block.children %}
+  <li>{{ child.text | e }}</li>
+  {%- endfor %}
+</ul>
+      {%- elif block.role.value == 'Figure' %}
+<figure>
+  <img src="" alt="{{ block.alt_text | default('') | e }}" role="img"/>
+</figure>
+      {%- elif block.role.value == 'Caption' %}
+<figcaption>{{ block.text | e }}</figcaption>
+      {%- elif block.role.value == 'Table' and block.table %}
+<table>
+  {%- if block.table.header_rows %}
+  <thead>
+    {%- for row in block.table.header_rows %}
+    <tr>
+      {%- for cell in row.cells %}
+      <th{% if cell.scope %} scope="{{ cell.scope }}"{% endif %}{% if cell.colspan > 1 %} colspan="{{ cell.colspan }}"{% endif %}{% if cell.rowspan > 1 %} rowspan="{{ cell.rowspan }}"{% endif %}>{{ cell.text | e }}</th>
+      {%- endfor %}
+    </tr>
+    {%- endfor %}
+  </thead>
+  {%- endif %}
+  {%- if block.table.body_rows %}
+  <tbody>
+    {%- for row in block.table.body_rows %}
+    <tr>
+      {%- for cell in row.cells %}
+      {%- if cell.role.value == 'TH' %}
+      <th{% if cell.scope %} scope="{{ cell.scope }}"{% endif %}{% if cell.colspan > 1 %} colspan="{{ cell.colspan }}"{% endif %}>{{ cell.text | e }}</th>
+      {%- else %}
+      <td{% if cell.colspan > 1 %} colspan="{{ cell.colspan }}"{% endif %}{% if cell.rowspan > 1 %} rowspan="{{ cell.rowspan }}"{% endif %}>{{ cell.text | e }}</td>
+      {%- endif %}
+      {%- endfor %}
+    </tr>
+    {%- endfor %}
+  </tbody>
+  {%- endif %}
+</table>
+      {%- elif block.role.value == 'Form' and block.form_field %}
+<label for="{{ block.form_field.field_name | e }}">{{ block.form_field.label | e }}</label>
+<input type="{{ block.form_field.field_type }}"
+       id="{{ block.form_field.field_name | e }}"
+       name="{{ block.form_field.field_name | e }}"
+       title="{{ block.form_field.tooltip | e }}"
+       tabindex="{{ block.form_field.tab_index }}"/>
+      {%- endif %}
+    {%- endif %}
+  {%- endfor %}
+{%- endfor %}
+</main>
+</body>
+</html>

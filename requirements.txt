@@ -1,0 +1,61 @@
+# Web framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+python-multipart==0.0.19
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+alembic==1.14.0
+
+# Settings
+pydantic-settings==2.6.1
+pydantic==2.10.3
+
+# Task queue
+celery==5.4.0
+redis==5.2.1
+
+# PDF parsing
+pymupdf==1.25.1
+
+# OCR
+surya-ocr==0.8.1
+pytesseract==0.3.13
+Pillow==11.0.0
+
+# Layout analysis
+docling==2.15.1
+
+# PDF generation
+weasyprint==62.3
+reportlab==4.2.5
+Jinja2==3.1.4
+
+# Metadata patching
+pikepdf==9.4.2
+
+# Alt text generation — BLIP (free, local, CPU-capable)
+transformers==4.47.1
+torch==2.5.1
+
+# Optional: set ANTHROPIC_API_KEY to upgrade alt text quality via Claude vision
+# anthropic==0.40.0
+
+# Language detection
+lingua-language-detector==2.0.2
+
+# Utilities
+python-magic==0.4.27
+structlog==24.4.0
+httpx==0.28.1
+tenacity==9.0.0
+
+# Sync DB driver (used by Celery workers, not needed in SIMPLE_MODE)
+psycopg2-binary==2.9.10
+
+# SIMPLE_MODE drivers (SQLite — no server required)
+aiosqlite==0.20.0
+
+# Security
+passlib[bcrypt]==1.7.4
