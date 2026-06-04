@@ -26,8 +26,8 @@ pymupdf==1.25.1
 pytesseract==0.3.13
 Pillow>=10.2.0,<11.0.0
 
-# PDF generation
-weasyprint==62.3
+# PDF generation — WeasyPrint excluded: its GTK/Pango/Cairo FFI causes
+# PyInstaller to hang on Windows. ReportLab is the fallback generator.
 reportlab==4.2.5
 Jinja2==3.1.4
 
@@ -35,11 +35,7 @@ Jinja2==3.1.4
 pikepdf==9.4.2
 fonttools>=4.28.0
 
-# Language detection (pure Python, no ML weights)
-lingua-language-detector==2.0.2
-
 # Utilities
-python-magic==0.4.27
 structlog==24.4.0
 httpx==0.28.1
 tenacity==9.0.0

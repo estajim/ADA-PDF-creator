@@ -28,7 +28,8 @@ _DB_PATH = RUNTIME_DIR / "ada_pdf.db"
 _STORAGE = RUNTIME_DIR / "storage"
 _VERAPDF = RUNTIME_DIR / "verapdf" / "verapdf"       # bundled veraPDF CLI
 
-os.environ.setdefault("SIMPLE_MODE",      "true")
+os.environ.setdefault("SIMPLE_MODE",        "true")
+os.environ.setdefault("WEASYPRINT_ENABLED", "false")   # not bundled; use ReportLab
 os.environ.setdefault("DATABASE_URL",     f"sqlite+aiosqlite:///{_DB_PATH}")
 os.environ.setdefault("STORAGE_ROOT",     str(_STORAGE))
 os.environ.setdefault("VERAPDF_CLI_PATH", str(_VERAPDF))

@@ -68,6 +68,12 @@ a = Analysis(
         "torch", "torchvision", "torchaudio",
         "transformers", "diffusers", "timm",
         "surya", "docling",
+        # WeasyPrint GTK/Pango/Cairo — hangs PyInstaller analysis on Windows
+        # App falls back to ReportLab for PDF generation
+        "weasyprint", "cairocffi", "cairosvg", "tinycss2",
+        "cssselect2", "fonttools.ttLib.tables",
+        # Native libs that don't bundle cleanly
+        "lingua", "magic",
         # Test / notebook / CUDA
         "pytest", "hypothesis", "IPython", "jupyter",
         "tensorboard", "tensorflow", "jax",
