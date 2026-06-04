@@ -76,7 +76,8 @@ pyz = PYZ(a.pure)
 
 import platform as _platform
 _IS_MAC = _platform.system() == "Darwin"
-_ICON   = str(ROOT / "build" / "ada_pdf_icon.icns") if _IS_MAC else None
+_ICNS   = ROOT / "build" / "ada_pdf_icon.icns"
+_ICON   = str(_ICNS) if (_IS_MAC and _ICNS.exists()) else None
 
 exe = EXE(
     pyz,
