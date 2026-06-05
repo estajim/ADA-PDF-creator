@@ -24,7 +24,7 @@ from datetime import datetime
 from pathlib import Path
 
 # ── Repo root on sys.path so ada_pdf imports work ─────────────────────────
-REPO_ROOT = Path(__file__).parent.parent
+REPO_ROOT = Path(__file__).parent.parent   # backend/
 sys.path.insert(0, str(REPO_ROOT))
 
 import pikepdf
